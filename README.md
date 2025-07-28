@@ -1,1 +1,1 @@
-# SatSetFit-Web
+# SatSet Fit Web
