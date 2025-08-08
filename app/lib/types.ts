@@ -1,3 +1,5 @@
+import z from "zod";
+
 export interface Product {
   id: string;
   name: string;
@@ -5,7 +7,7 @@ export interface Product {
   description: string;
   specifications: string[];
   benefits: string[];
-  images: string[];
+  imageUrl: string;
   videos: string[];
   category: string;
   sku: string;
@@ -14,6 +16,16 @@ export interface Product {
   relatedPrograms: string[];
 }
 
+export const productSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  name: z.string(),
+  price: z.number(),
+  featuredProduct: z.boolean(),
+  imageUrl: z.string().nullable().optional(),
+  stockQuantity: z.number().optional(),
+  description: z.string().nullable().optional(),
+});
 export interface CartItem {
   product: Product;
   quantity: number;

@@ -1,17 +1,11 @@
 import { Button } from "~/components/ui/button";
+import { CroppedImage } from "~/components/cropped-image";
 import { Link } from "react-router";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "~/components/ui/select";
+
 import { ArrowRight, Filter, Star, Users, Award, Truck } from "lucide-react";
 import { ProductCard } from "~/components/product-card";
 import type { Route } from "./+types/home";
-import { Input } from "~/components/ui/input";
-import { MobileSearch } from "~/components/mobile-search";
+import type { Product } from "~/lib/types";
 
 export function meta() {
   return [
@@ -28,15 +22,15 @@ export function meta() {
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API_URL}/products`
+    `${import.meta.env.VITE_BACKEND_API_URL}/products/featured`
   );
-  const products = await response.json();
-  console.log("Products loaded:", products);
-  return products;
+  const featuredProducts = await response.json();
+  console.log("Products loaded:", featuredProducts);
+  return featuredProducts;
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { products } = loaderData;
+  const featuredProducts = loaderData;
 
   return (
     <div className="min-h-screen">
@@ -99,12 +93,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
 
             <div className="relative order-first lg:order-last">
-              <img
-                src="/placeholder.svg?height=600&width=600&text=Hero+Workout+Image"
+              <CroppedImage
+                src="public/images/hero.jpg"
                 alt="Portable workout equipment"
                 width={600}
                 height={600}
-                className="rounded-2xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none"
+                cropPosition="center"
+                className="w-full max-w-md mx-auto lg:max-w-none"
               />
               <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 bg-white p-3 sm:p-4 rounded-xl shadow-lg">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -199,7 +194,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {featuredProducts.map((product) => (
+            {featuredProducts.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -212,77 +207,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </Button>
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Product Catalog Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Complete Product Catalog
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Find the perfect equipment for your fitness goals
-            </p>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="flex flex-col gap-4 mb-8">
-            <div className="flex items-center gap-2">
-              <div className="flex-1">
-                <Input
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full hidden sm:block"
-                />
-              </div>
-              <MobileSearch onSearch={handleMobileSearch} />
-            </div>
-            <div className="flex flex-col xs:flex-row gap-3 xs:gap-4">
-              <Select value={filterCategory} onValueChange={setFilterCategory}>
-                <SelectTrigger className="w-full xs:w-48">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder="Filter by category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full xs:w-48">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="featured">Featured</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="name">Name A-Z</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground">
-                No products found matching your criteria.
-              </p>
-            </div>
-          )}
         </div>
       </section>
 

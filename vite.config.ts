@@ -5,4 +5,15 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  build: {
+    assetsInlineLimit: 4096,
+  },
+  assetsInclude: [
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.png",
+    "**/*.gif",
+    "**/*.svg",
+    "**/*.webp",
+  ],
 });
