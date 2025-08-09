@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
       <CardContent className="p-3 sm:p-4 flex-1 flex flex-col">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <Link to={`/products/${product.id}`} className="flex-1">
+          <Link to={`/products/${product.slug}`} className="flex-1">
             <h3 className="font-semibold text-sm sm:text-base leading-tight hover:text-primary transition-colors line-clamp-2">
               {product.name}
             </h3>

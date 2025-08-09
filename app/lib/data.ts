@@ -56,7 +56,7 @@ export const products: Product[] = [
       "Compact storage",
       "Durable construction",
     ],
-    images: [
+    imagesUrl : [
       "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+1",
       "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+2",
     ],

@@ -1,6 +1,8 @@
 import { Button } from "~/components/ui/button";
 import { CroppedImage } from "~/components/cropped-image";
 import { Link } from "react-router";
+import createClient from "openapi-fetch";
+import type { paths } from "~/lib/api/v1";
 
 import { ArrowRight, Filter, Star, Users, Award, Truck } from "lucide-react";
 import { ProductCard } from "~/components/product-card";
@@ -20,11 +22,15 @@ export function meta() {
   ];
 }
 
+const client = createClient<paths>({
+  baseUrl: import.meta.env.VITE_BACKEND_API_URL,
+});
+
 export async function clientLoader({}: Route.ClientLoaderArgs) {
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_API_URL}/products/featured`
-  );
-  const featuredProducts = await response.json();
+  const response = await client.GET("/products/featured");
+
+  const { data: featuredProducts } = await client.GET("/products/featured");
+  // const featuredProducts = await response.json();
   console.log("Products loaded:", featuredProducts);
   return featuredProducts;
 }

@@ -1,0 +1,235 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Fitlex API",
+    "description": "API for the Fitlex website"
+  },
+  "components": { "schemas": {}, "parameters": {} },
+  "paths": {
+    "/products": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The unique identifier for the product",
+                        "example": "01H8MECHZX3TBDSZ7XRADM79XV"
+                      },
+                      "slug": {
+                        "type": "string",
+                        "description": "The slug for the product",
+                        "example": "collapsible-kettlebell"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the product",
+                        "example": "Collapsible Kettlebell"
+                      },
+                      "price": {
+                        "type": "number",
+                        "description": "The price of the product",
+                        "example": 10000
+                      },
+                      "featuredProduct": {
+                        "type": "boolean",
+                        "description": "Whether the product is featured",
+                        "example": true
+                      },
+                      "imageUrl": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The URL of the product image",
+                        "example": "https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/"
+                      },
+                      "stockQuantity": {
+                        "type": "number",
+                        "description": "The stock quantity of the product",
+                        "example": 10
+                      },
+                      "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "A brief description of the product",
+                        "example": "A versatile kettlebell that can be collapsed for easy storage."
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "slug",
+                      "name",
+                      "price",
+                      "featuredProduct"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/featured": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Featured products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The unique identifier for the product",
+                        "example": "01H8MECHZX3TBDSZ7XRADM79XV"
+                      },
+                      "slug": {
+                        "type": "string",
+                        "description": "The slug for the product",
+                        "example": "collapsible-kettlebell"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the product",
+                        "example": "Collapsible Kettlebell"
+                      },
+                      "price": {
+                        "type": "number",
+                        "description": "The price of the product",
+                        "example": 10000
+                      },
+                      "featuredProduct": {
+                        "type": "boolean",
+                        "description": "Whether the product is featured",
+                        "example": true
+                      },
+                      "imageUrl": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The URL of the product image",
+                        "example": "https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/"
+                      },
+                      "stockQuantity": {
+                        "type": "number",
+                        "description": "The stock quantity of the product",
+                        "example": 10
+                      },
+                      "description": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "A brief description of the product",
+                        "example": "A versatile kettlebell that can be collapsed for easy storage."
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "slug",
+                      "name",
+                      "price",
+                      "featuredProduct"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{slug}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "~standard": { "vendor": "zod", "version": 1 },
+              "def": {
+                "type": "object",
+                "shape": {
+                  "slug": {
+                    "~standard": { "vendor": "zod", "version": 1 },
+                    "def": { "type": "string" },
+                    "format": null,
+                    "minLength": null,
+                    "maxLength": null
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product by slug",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the product",
+                      "example": "01H8MECHZX3TBDSZ7XRADM79XV"
+                    },
+                    "slug": {
+                      "type": "string",
+                      "description": "The slug for the product",
+                      "example": "collapsible-kettlebell"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the product",
+                      "example": "Collapsible Kettlebell"
+                    },
+                    "price": {
+                      "type": "number",
+                      "description": "The price of the product",
+                      "example": 10000
+                    },
+                    "featuredProduct": {
+                      "type": "boolean",
+                      "description": "Whether the product is featured",
+                      "example": true
+                    },
+                    "imageUrl": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "The URL of the product image",
+                      "example": "https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/"
+                    },
+                    "stockQuantity": {
+                      "type": "number",
+                      "description": "The stock quantity of the product",
+                      "example": 10
+                    },
+                    "description": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "A brief description of the product",
+                      "example": "A versatile kettlebell that can be collapsed for easy storage."
+                    }
+                  },
+                  "required": ["id", "slug", "name", "price", "featuredProduct"]
+                }
+              }
+            }
+          },
+          "404": { "description": "Product not found" }
+        }
+      }
+    }
+  }
+}
