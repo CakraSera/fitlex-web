@@ -15,7 +15,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="aspect-square overflow-hidden">
         <Link to={`/products/${product.id}`}>
           <img
-            src={product.imageUrl || "/placeholder.svg"}
+            src={product.imageUrls[0] || "/placeholder.svg"}
             alt={product.name}
             width={400}
             height={400}
@@ -30,7 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </h3>
           </Link>
-          {product.isFeatured && (
+          {product.featuredProduct && (
             <Badge variant="secondary" className="text-xs shrink-0">
               Featured
             </Badge>
@@ -49,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </CardContent>
       <CardFooter className="p-3 sm:p-4 pt-0">
-        <Link to={`/products/${product.id}`} className="w-full">
+        <Link to={`/products/${product.slug}`} className="w-full">
           <Button className="w-full text-xs sm:text-sm" size="sm">
             View Details
           </Button>

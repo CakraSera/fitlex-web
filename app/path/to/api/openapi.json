@@ -5,7 +5,10 @@
     "title": "Fitlex API",
     "description": "API for the Fitlex website"
   },
-  "components": { "schemas": {}, "parameters": {} },
+  "components": {
+    "schemas": {},
+    "parameters": {}
+  },
   "paths": {
     "/products": {
       "get": {
@@ -151,24 +154,15 @@
       "get": {
         "parameters": [
           {
-            "name": "slug",
-            "in": "path",
-            "required": true,
             "schema": {
-              "~standard": { "vendor": "zod", "version": 1 },
-              "def": {
-                "type": "object",
-                "shape": {
-                  "slug": {
-                    "~standard": { "vendor": "zod", "version": 1 },
-                    "def": { "type": "string" },
-                    "format": null,
-                    "minLength": null,
-                    "maxLength": null
-                  }
-                }
-              }
-            }
+              "type": "string",
+              "description": "The slug of the product",
+              "example": "adjustable-dumbbells-set"
+            },
+            "required": true,
+            "description": "The slug of the product",
+            "name": "slug",
+            "in": "path"
           }
         ],
         "responses": {
@@ -227,7 +221,9 @@
               }
             }
           },
-          "404": { "description": "Product not found" }
+          "404": {
+            "description": "Product not found"
+          }
         }
       }
     }

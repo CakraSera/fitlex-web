@@ -168,7 +168,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    slug: unknown;
+                    /** @description The slug of the product */
+                    slug: string;
                 };
                 cookie?: never;
             };

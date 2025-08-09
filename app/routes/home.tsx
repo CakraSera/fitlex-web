@@ -1,6 +1,7 @@
 import { Button } from "~/components/ui/button";
 import { CroppedImage } from "~/components/cropped-image";
 import { Link } from "react-router";
+
 import createClient from "openapi-fetch";
 import type { paths } from "~/lib/api/v1";
 
@@ -27,16 +28,13 @@ const client = createClient<paths>({
 });
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
-  const response = await client.GET("/products/featured");
-
   const { data: featuredProducts } = await client.GET("/products/featured");
   // const featuredProducts = await response.json();
-  console.log("Products loaded:", featuredProducts);
-  return featuredProducts;
+  return { featuredProducts };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const featuredProducts = loaderData;
+  const { featuredProducts } = loaderData as { featuredProducts?: Product[] };
 
   return (
     <div className="min-h-screen">
@@ -200,7 +198,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
 
           <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {featuredProducts.map((product: Product) => (
+            {featuredProducts?.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

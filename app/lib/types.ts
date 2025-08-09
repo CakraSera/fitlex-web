@@ -8,12 +8,12 @@ export interface Product {
   description: string;
   specifications: string[];
   benefits: string[];
-  imageUrl: string;
+  imageUrls: string[];
   videos: string[];
   category: string;
   sku: string;
-  inStock: boolean;
-  isFeatured: boolean;
+  stockQuantity: number;
+  featuredProduct: boolean;
   relatedPrograms: string[];
 }
 

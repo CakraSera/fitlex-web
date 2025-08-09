@@ -11,7 +11,7 @@ export default [
     index("routes/home.tsx"),
     ...prefix("products", [
       route("/", "routes/products.tsx"),
-      // route("/:slug", "routes/product-slug.tsx"),
+      route("/:slug", "routes/products-slug.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;
