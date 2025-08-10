@@ -10,7 +10,7 @@ export function Footer() {
                   PW
                 </span>
               </div>
-              <span className="font-bold text-xl">PortableWorkout</span>
+              <span className="font-bold text-xl">Fitlex</span>
             </div>
             <p className="text-muted-foreground text-sm">
               Transform your space into a personal gym with our premium portable
@@ -126,7 +126,7 @@ export function Footer() {
         </div>
 
         <div className="border-t mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-muted-foreground">
-          <p>&copy; 2024 PortableWorkout. All rights reserved.</p>
+          <p>&copy; 2025 Fitlke. All rights reserved.</p>
         </div>
       </div>
     </footer>
