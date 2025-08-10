@@ -6,7 +6,7 @@ import { Link } from "react-router";
 // import { useCartStore } from "~/lib/store";
 
 export function Header() {
-  //   const totalItems = useCartStore((state) => state.getTotalItems());
+  const totalItems = 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -64,12 +64,11 @@ export function Header() {
               className="relative h-8 w-8 sm:h-10 sm:w-10">
               <ShoppingCart className="h-4 w-4" />
               <span className="sr-only">Shopping cart</span>
-              {/* {totalItems > 0 && ( */}
-              <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
-                {/* {totalItems > 99 ? "99+" : totalItems} */}
-                99
-              </Badge>
-              {/* )} */}
+              {totalItems > 0 && (
+                <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </Badge>
+              )}
             </Button>
           </Link>
 

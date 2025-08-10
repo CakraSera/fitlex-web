@@ -56,19 +56,20 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-                <Link to="/bundles">
+                {/* <Link to="/bundles">
                   <Button
                     size="lg"
                     className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8">
                     Shop Bundle Deals - Save Up to 30%
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
-                </Link>
+                </Link> */}
                 <Link to="#featured">
                   <Button
-                    variant="outline"
+                    // variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent">
+                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8">
+                    {/* className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent"> */}
                     View Products
                   </Button>
                 </Link>

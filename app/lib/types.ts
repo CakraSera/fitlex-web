@@ -15,6 +15,7 @@ export interface Product {
   stockQuantity: number;
   featuredProduct: boolean;
   relatedPrograms: string[];
+  primaryIndexUrl: number;
 }
 
 export const productSchema = z.object({

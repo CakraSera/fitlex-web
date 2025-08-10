@@ -165,12 +165,15 @@ export default function ProductPage({ loaderData }: ProductPageProps) {
                         type="number"
                         min="1"
                         value={quantity}
-                        onChange={(e) =>
+                        onChange={(event) =>
                           setQuantity(
-                            Math.max(1, Number.parseInt(e.target.value) || 1)
+                            Math.max(
+                              1,
+                              Number.parseInt(event.target.value) || 1
+                            )
                           )
                         }
-                        className="w-16 sm:w-20 text-center"
+                        className="w-16 sm:w-20 text-center bg-white"
                       />
                       <Button
                         variant="outline"
@@ -226,56 +229,29 @@ export default function ProductPage({ loaderData }: ProductPageProps) {
         </div>
 
         {/* Technical Specifications */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="mb-16">
           <Card>
             <CardHeader>
               <CardTitle>Technical Specifications</CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
-                {product.specifications.map((spec, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between items-start gap-4">
-                    <span className="text-muted-foreground">
-                      {spec.split(":")[0]}:
-                    </span>
-                    <span className="font-medium text-right">
-                      {spec.split(":")[1]}
-                    </span>
-                  </li>
-                ))}
+                {product.specifications.map((spec, index) => {
+                  const [label, value = ""] = spec.split(":");
+                  return (
+                    <li
+                      key={index}
+                      className="flex justify-between items-start gap-4">
+                      <span className="text-muted-foreground">{label}:</span>
+                      <span className="font-medium text-right">
+                        {value.trim()}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </CardContent>
           </Card>
-
-          {/* Related Workout Programs */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Related In-App Workout Programs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {product.relatedPrograms.map((program, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <span className="font-medium">{program}</span>
-                    <Button variant="ghost" size="sm">
-                      <Play className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              <Separator className="my-4" />
-              <p className="text-sm text-muted-foreground">
-                Download our app to access these workout programs and more!
-              </p>
-              <Button variant="outline" className="w-full mt-3 bg-transparent">
-                Download App
-              </Button>
-            </CardContent>
-          </Card> */}
         </div>
 
         {/* Related Products */}

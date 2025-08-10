@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import type { Route } from "./+types/products";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
@@ -15,7 +16,6 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { ProductCard } from "~/components/product-card";
 import { MobileSearch } from "~/components/mobile-search";
-import { products } from "~/lib/data";
 import { formatCurrency } from "~/lib/utils";
 import {
   Filter,
@@ -26,7 +26,31 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 
-export default function ProductsPage() {
+import createClient from "openapi-fetch";
+import type { paths } from "~/lib/api/v1";
+import type { Product } from "~/lib/types";
+
+const client = createClient<paths>({
+  baseUrl: import.meta.env.VITE_BACKEND_API_URL,
+});
+
+export async function clientLoader({}: Route.ClientLoaderArgs) {
+  const { data } = await client.GET("/products");
+  return { products: data };
+}
+
+  export default function ProductsPage({ loaderData }: Route.ComponentProps) {
+  const { products } = loaderData as {
+    products?: Product[];
+  };
+
+  if (!products) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Product is empty</p>
+      </div>
+    );
+  }
   const [sortBy, setSortBy] = useState("featured");
   const [filterCategory, setFilterCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +60,9 @@ export default function ProductsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
 
-  const categories = [...new Set(products.map((p) => p.category))];
+  const categories = [
+    ...new Set((products ?? []).map((product) => product.category)),
+  ];
   const priceRanges = [
     { value: "all", label: "All Prices" },
     { value: "0-200000", label: "Under Rp 200,000" },
@@ -45,8 +71,9 @@ export default function ProductsPage() {
     { value: "1000000+", label: "Over Rp 1,000,000" },
   ];
 
-  const filteredProducts = products
-    .filter((product) => {
+  const filteredProducts = (products ?? [])
+    .filter((product: Product) => {
+      const inStock = product.stockQuantity > 0;
       // Category filter
       const matchesCategory =
         filterCategory === "all" || product.category === filterCategory;
@@ -69,10 +96,10 @@ export default function ProductsPage() {
       }
 
       // Stock filter
-      const matchesStock = !inStockOnly || product.inStock;
+      const matchesStock = !inStockOnly || inStock;
 
       // Featured filter
-      const matchesFeatured = !featuredOnly || product.isFeatured;
+      const matchesFeatured = !featuredOnly || product.featuredProduct;
 
       return (
         matchesCategory &&
@@ -82,18 +109,18 @@ export default function ProductsPage() {
         matchesFeatured
       );
     })
-    .sort((a, b) => {
+    .sort((productA: Product, productB: Product) => {
       switch (sortBy) {
         case "price-low":
-          return a.price - b.price;
+          return productA.price - productB.price;
         case "price-high":
-          return b.price - a.price;
+          return productB.price - productA.price;
         case "name":
-          return a.name.localeCompare(b.name);
+          return productA.name.localeCompare(productB.name);
         case "category":
-          return a.category.localeCompare(b.category);
+          return productA.category.localeCompare(productB.category);
         default:
-          return b.isFeatured ? 1 : -1;
+          return productB.featuredProduct ? 1 : -1;
       }
     });
 
@@ -137,7 +164,7 @@ export default function ProductsPage() {
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold">All Products</h1>
               <p className="text-muted-foreground">
-                {filteredProducts.length} of {products.length} products
+                {filteredProducts.length} of {products?.length ?? 0} products
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -348,7 +375,10 @@ export default function ProductsPage() {
                   )}
                   {priceRange !== "all" && (
                     <Badge variant="secondary" className="gap-1">
-                      {priceRanges.find((r) => r.value === priceRange)?.label}
+                      {
+                        priceRanges.find((price) => price.value === priceRange)
+                          ?.label
+                      }
                       <Button
                         variant="ghost"
                         size="sm"
@@ -370,8 +400,9 @@ export default function ProductsPage() {
                     ? "grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
                     : "space-y-4"
                 }>
-                {filteredProducts.map((product) =>
-                  viewMode === "grid" ? (
+                {filteredProducts.map((product: Product) => {
+                  const inStock: boolean = product.stockQuantity > 0;
+                  return viewMode === "grid" ? (
                     <ProductCard key={product.id} product={product} />
                   ) : (
                     <Card key={product.id} className="overflow-hidden">
@@ -379,7 +410,10 @@ export default function ProductsPage() {
                         <div className="flex gap-4 p-4">
                           <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0">
                             <img
-                              src={product.imageUrl || "/placeholder.svg"}
+                              src={
+                                product.imageUrls[product.primaryIndexUrl] ||
+                                "/placeholder.svg"
+                              }
                               alt={product.name}
                               width={128}
                               height={128}
@@ -389,7 +423,7 @@ export default function ProductsPage() {
                           <div className="flex-1 space-y-2">
                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                               <div className="flex-1">
-                                <Link to={`/products/${product.id}`}>
+                                <Link to={`/products/${product.slug}`}>
                                   <h3 className="font-semibold text-lg hover:text-primary transition-colors">
                                     {product.name}
                                   </h3>
@@ -398,7 +432,7 @@ export default function ProductsPage() {
                                   <Badge variant="outline" className="text-xs">
                                     {product.category}
                                   </Badge>
-                                  {product.isFeatured && (
+                                  {product.featuredProduct && (
                                     <Badge
                                       variant="secondary"
                                       className="text-xs">
@@ -407,14 +441,10 @@ export default function ProductsPage() {
                                   )}
                                   <Badge
                                     variant={
-                                      product.inStock
-                                        ? "default"
-                                        : "destructive"
+                                      inStock ? "default" : "destructive"
                                     }
                                     className="text-xs">
-                                    {product.inStock
-                                      ? "In Stock"
-                                      : "Out of Stock"}
+                                    {inStock ? "In Stock" : "Out of Stock"}
                                   </Badge>
                                 </div>
                               </div>
@@ -442,7 +472,7 @@ export default function ProductsPage() {
                                     </span>
                                   ))}
                               </div>
-                              <Link to={`/products/${product.id}`}>
+                              <Link to={`/products/${product.slug}`}>
                                 <Button size="sm">View Details</Button>
                               </Link>
                             </div>
@@ -450,8 +480,8 @@ export default function ProductsPage() {
                         </div>
                       </CardContent>
                     </Card>
-                  )
-                )}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-12">
