@@ -45,37 +45,35 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
               <div className="space-y-4">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight">
-                  Complete Workout{" "}
-                  <span className="text-primary">Bundle Solutions</span> for
-                  Small Spaces
+                  Premium Portable{" "}
+                  <span className="text-primary">Workout Equipment</span>
                 </h1>
                 <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0">
-                  Get everything you need with our curated workout bundles. Save
-                  money and transform any space into your personal gym.
+                  Shop our curated collection of space‑saving gear. Build your
+                  personal gym with high‑quality products.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-                {/* <Link to="/bundles">
+                <Link to="/products">
                   <Button
                     size="lg"
                     className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8">
-                    Shop Bundle Deals - Save Up to 30%
+                    Shop All Products
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
-                </Link> */}
+                </Link>
                 <Link to="#featured">
                   <Button
-                    // variant="outline"
+                    variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8">
-                    {/* className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent"> */}
-                    View Products
+                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent">
+                    View Featured
                   </Button>
                 </Link>
               </div>
 
-              <div className="flex flex-col xs:flex-row items-center gap-4 xs:gap-8 pt-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 pt-4 justify-center lg:justify-start">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-yellow-400 text-yellow-400" />
                   <span className="font-semibold text-sm sm:text-base">
@@ -99,7 +97,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
             <div className="relative order-first lg:order-last">
               <CroppedImage
-                src="public/images/hero.jpg"
+                src="/images/hero.jpg"
                 alt="Portable workout equipment"
                 width={600}
                 height={600}
@@ -215,30 +213,29 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Product Focus */}
       <section className="py-20 bg-primary text-primary-foreground">
         <div className="container text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <h2 className="text-3xl lg:text-4xl font-bold">
-              Ready to Save Big on Complete Workout Solutions?
+              Ready to Transform Your Fitness?
             </h2>
             <p className="text-xl opacity-90">
-              Choose from our curated bundles and save up to 30% compared to
-              buying individual items
+              Browse our bestsellers and find the gear that fits your space.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/bundles">
+              <Link to="/products">
                 <Button size="lg" variant="secondary" className="text-lg px-8">
-                  Shop Bundle Deals
+                  Shop Products
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/products">
+              <Link to="#featured">
                 <Button
                   size="lg"
                   variant="outline"
                   className="text-lg px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent">
-                  Browse Individual Products
+                  View Featured
                 </Button>
               </Link>
             </div>

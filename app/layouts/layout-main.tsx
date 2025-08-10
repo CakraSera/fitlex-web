@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
 
 export default function UserLayout() {
@@ -8,9 +9,7 @@ export default function UserLayout() {
       <main>
         <Outlet />
       </main>
-      <footer>
-        <p>&copy; 2023 Fitlex</p>
-      </footer>
+      <Footer />
     </>
   );
 }
