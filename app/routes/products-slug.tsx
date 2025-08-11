@@ -9,7 +9,7 @@ import { Label } from "~/components/ui/label";
 import { ProductCard } from "~/components/product-card";
 
 import createClient from "openapi-fetch";
-import type { paths } from "~/lib/api/v1";
+import type { paths } from "~/generated/schema.d.ts";
 
 // import { useCartStore } from "@/lib/store";
 import { formatCurrency } from "~/lib/utils";

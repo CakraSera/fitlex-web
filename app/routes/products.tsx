@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 import createClient from "openapi-fetch";
-import type { paths } from "~/lib/api/v1";
+import type { paths } from "~/generated/schema.d.ts";
 import type { Product } from "~/lib/types";
 
 const client = createClient<paths>({
@@ -39,7 +39,7 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
   return { products: data };
 }
 
-  export default function ProductsPage({ loaderData }: Route.ComponentProps) {
+export default function ProductsPage({ loaderData }: Route.ComponentProps) {
   const { products } = loaderData as {
     products?: Product[];
   };

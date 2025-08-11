@@ -3,7 +3,7 @@ import { CroppedImage } from "~/components/cropped-image";
 import { Link } from "react-router";
 
 import createClient from "openapi-fetch";
-import type { paths } from "~/lib/api/v1";
+import type { paths } from "~/generated/schema.d.ts";
 
 import { ArrowRight, Filter, Star, Users, Award, Truck } from "lucide-react";
 import { ProductCard } from "~/components/product-card";

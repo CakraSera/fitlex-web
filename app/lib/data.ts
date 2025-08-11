@@ -1,4 +1,9 @@
-import type { Product, BundlePackage } from "./types";
+import type { Product, BundlePackage, User } from "./types";
+
+export const user: User = {
+  name: "John Doe",
+  email: "johndoe@gmail.com",
+};
 
 export const products: Product[] = [
   {
@@ -56,7 +61,7 @@ export const products: Product[] = [
       "Compact storage",
       "Durable construction",
     ],
-    imagesUrl : [
+    imagesUrl: [
       "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+1",
       "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+2",
     ],

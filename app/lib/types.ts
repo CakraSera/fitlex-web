@@ -1,5 +1,10 @@
 import z from "zod";
 
+export interface User {
+  name: string;
+  email: string;
+}
+
 export interface Product {
   id: string;
   slug: string;

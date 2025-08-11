@@ -1,12 +1,23 @@
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart, Search, LogOut, User } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-// import { MobileNav } from "~/components/mobile-nav";
+import { MobileNav } from "~/components/mobile-nav";
 import { Link } from "react-router";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+// import { user } from "~/lib/data";
+import type { User as UserType } from "~/lib/types";
 // import { useCartStore } from "~/lib/store";
 
 export function Header() {
   const totalItems = 0;
+  const user: UserType | null = null; // Replace with actual user state management
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -71,9 +82,54 @@ export function Header() {
               )}
             </Button>
           </Link>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden lg:flex h-8 w-8 sm:h-10 sm:w-10">
+                  <User className="h-4 w-4" />
+                  <span className="sr-only">User menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {user?.name ?? ""}
+                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user?.email ?? ""}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => console.info("User Logout")}
+                  className="text-red-600 focus:text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="hidden lg:flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="text-sm">
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" className="text-sm">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
 
           {/* Mobile Navigation */}
-          {/* <MobileNav /> */}
+          <MobileNav />
         </div>
       </div>
     </header>
