@@ -3,11 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev",
+    "dev": "bun openapi:gen && react-router dev",
+    "build": "bun openapi:gen:prod && react-router build",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "test:ts": "tsc --noEmit"
+    "test:ts": "tsc --noEmit",
+    "openapi:gen": "openapi-typescript http://localhost:3000/openapi.json -o ./app/generated/schema.d.ts",
+    "openapi:gen:prod": "openapi-typescript https://fitlex.aplikasi.com/openapi.json -o ./app/generated/schema.d.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.2",

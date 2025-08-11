@@ -3,7 +3,7 @@ import { CroppedImage } from "~/components/cropped-image";
 import { Link } from "react-router";
 
 import createClient from "openapi-fetch";
-import type { paths } from "~/lib/api/v1";
+import type { paths } from "~/generated/schema";
 
 import { ArrowRight, Filter, Star, Users, Award, Truck } from "lucide-react";
 import { ProductCard } from "~/components/product-card";
@@ -28,7 +28,7 @@ const client = createClient<paths>({
 });
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
-  const { data: featuredProducts } = await client.GET("/products/featured");
+  const { data: featuredProducts } = await client.GET("/products");
   // const featuredProducts = await response.json();
   return { featuredProducts };
 }
@@ -58,7 +58,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 <Link to="/products">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8">
+                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8"
+                  >
                     Shop All Products
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
@@ -67,7 +68,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent">
+                    className="w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 bg-transparent"
+                  >
                     View Featured
                   </Button>
                 </Link>
@@ -234,7 +236,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="text-lg px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent">
+                  className="text-lg px-8 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary bg-transparent"
+                >
                   View Featured
                 </Button>
               </Link>
