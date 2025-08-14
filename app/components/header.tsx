@@ -11,12 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-// import { user } from "~/lib/data";
 import type { User as UserType } from "~/lib/types";
-// import { useCartStore } from "~/lib/store";
+import { dummyCartItems } from "~/lib/data";
 
 export function Header() {
-  const totalItems = 0;
+  const totalItems = dummyCartItems.length;
   const user: UserType | null = null; // Replace with actual user state management
 
   return (

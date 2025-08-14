@@ -15,7 +15,6 @@ export default function CartPage() {
     0
   );
   const totalItems = items.length;
-  //   const shippingCost = totalPrice >= 500000 ? 0 : 25000;
   const finalTotal = totalPrice;
 
   if (items.length === 0) {
