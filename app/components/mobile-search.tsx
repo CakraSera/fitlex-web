@@ -16,13 +16,14 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Search, X } from "lucide-react";
-import { products } from "~/lib/data";
+import type { Product } from "~/lib/types";
 
 interface MobileSearchProps {
   onSearch?: (query: string, category: string) => void;
+  products: Product[];
 }
 
-export function MobileSearch({ onSearch }: MobileSearchProps) {
+export function MobileSearch({ onSearch, products }: MobileSearchProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");

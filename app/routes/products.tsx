@@ -327,7 +327,7 @@ export default function ProductsPage({ loaderData }: Route.ComponentProps) {
             {/* Sort and View Controls */}
             <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-4 mb-6">
               <div className="flex items-center gap-2">
-                <MobileSearch onSearch={handleMobileSearch} />
+                <MobileSearch onSearch={handleMobileSearch} products={products}/>
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="w-full xs:w-48">
                     <SelectValue placeholder="Sort by" />
