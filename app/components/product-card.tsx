@@ -13,7 +13,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="group overflow-hidden h-full flex flex-col">
       <div className="aspect-square overflow-hidden">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/products/${product.slug}`}>
           <img
             src={product.imageUrls[0] || "/placeholder.svg"}
             alt={product.name}

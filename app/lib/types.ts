@@ -37,13 +37,3 @@ export interface CartItem {
   product: Product;
   quantity: number;
 }
-
-export interface BundlePackage {
-  id: string;
-  name: string;
-  description: string;
-  products: string[];
-  originalPrice: number;
-  bundlePrice: number;
-  image: string;
-}
