@@ -173,7 +173,7 @@ export default function ProductPage({ loaderData }: ProductPageProps) {
                             )
                           )
                         }
-                        className="w-16 sm:w-20 text-center bg-white"
+                        className="w-16 sm:w-20 text-center"
                       />
                       <Button
                         variant="outline"

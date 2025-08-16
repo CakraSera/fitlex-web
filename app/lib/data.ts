@@ -8,43 +8,35 @@ export const user: User = {
 export const dummyCartItems: CartItem[] = [
   {
     product: {
-      id: "1",
-      name: "Resistance Bands Set Pro",
-      price: 299000,
+      id: "01K2B30X9RYX6D5K5880P9RN3N",
+      sku: "BAL-1935",
+      slug: "balance-board-pro",
+      name: "Balance Board Pro",
+      category: "Balance & Stability",
       description:
-        "Complete resistance bands set perfect for full-body workouts in small spaces. Includes 5 resistance levels and door anchor.",
+        "Wooden balance board for core strengthening and stability training. Great for rehabilitation too.",
+      stockQuantity: 0,
+      price: 249000,
+      featuredProduct: false,
+      imageUrls: [
+        "https://ucarecdn.com/dcc9896c-67ab-41eb-b0f6-c4c5677d4edf/-/preview/500x500/",
+        "/placeholder.svg?height=400&width=400&text=Balance+Board+2",
+      ],
+      primaryIndexUrl: 0,
       specifications: [
-        "Material: Premium latex rubber",
-        "Resistance levels: 5 (10-50 lbs)",
-        "Length: 48 inches",
-        "Includes door anchor and handles",
-        "Weight: 2 lbs",
+        "Material: Birch plywood",
+        "Diameter: 16 inches",
+        "Height: 3 inches",
+        "Weight capacity: 300 lbs",
+        "Non-slip surface",
       ],
       benefits: [
-        "Full-body strength training",
-        "Compact and portable",
-        "Suitable for all fitness levels",
-        "Joint-friendly resistance",
+        "Improves balance and coordination",
+        "Strengthens core muscles",
+        "Enhances proprioception",
+        "Injury prevention",
       ],
-      imageUrls: [
-        "/placeholder.svg?height=400&width=400&text=Resistance+Bands+1",
-        "/placeholder.svg?height=400&width=400&text=Resistance+Bands+2",
-      ],
-      videos: [
-        "/placeholder.svg?height=300&width=400&text=Resistance+Bands+Video",
-      ],
-      category: "Resistance Training",
-      sku: "RB-PRO-001",
-      stockQuantity: 5,
-      featuredProduct: true,
-      relatedPrograms: [
-        "Morning Energy Boost",
-        "Desk Break Stretches",
-        "Full Body Strength",
-      ],
-      slug: "",
-      primaryIndexUrl: 0,
-    }, // Resistance Bands Set Pro
+    },
     quantity: 2,
   },
   {
@@ -68,8 +60,8 @@ export const dummyCartItems: CartItem[] = [
         "Durable construction",
       ],
       imageUrls: [
-        "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+1",
-        "/placeholder.svg?height=400&width=400&text=Adjustable+Dumbbells+2",
+        "https://ucarecdn.com/8661c810-105d-4292-81a4-6eb48a6b43be/-/preview/1000x1000/",
+        "https://ucarecdn.com/8661c810-105d-4292-81a4-6eb48a6b43be/-/preview/1000x666/",
       ],
       videos: ["/placeholder.svg?height=300&width=400&text=Dumbbells+Video"],
       category: "Free Weights",
