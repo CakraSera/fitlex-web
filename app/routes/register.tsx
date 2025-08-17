@@ -1,15 +1,12 @@
-"use client";
-
-import type React from "react";
 import z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router";
+import { Link, redirect, useNavigate } from "react-router";
+import { useSessionStorage } from "@uidotdev/usehooks";
 import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,27 +22,19 @@ import {
 } from "~/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
-
-const registerSchema = z
-  .object({
-    fullname: z.string().min(1, "Full name is required"),
-    email: z.email("Invalid email address"),
-    password: z.string().min(15, "Password must be at least 15 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+import { toast } from "sonner";
+import { registerSchema, type User } from "~/lib/types";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
+  const [user, setUser] = useSessionStorage<User | null>("user", null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullname: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -53,7 +42,22 @@ export default function RegisterPage() {
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
+    const registerUserData = {
+      fullName: String(values.fullName),
+      email: String(values.email),
+      password: String(values.password),
+    };
+
+    console.table(user);
+
+    if (!user) {
+      setUser(registerUserData);
+      return navigate("/dashboard");
+    }
+    toast.error(
+      "This account is already registered. Please register use a different account."
+    );
+    return null;
   }
 
   return (
@@ -72,7 +76,7 @@ export default function RegisterPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="fullname"
+                name="fullName"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel>Full Name</FormLabel>

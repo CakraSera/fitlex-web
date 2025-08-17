@@ -22,24 +22,29 @@ import {
 } from "~/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
-
-const loginSchema = z.object({
-  email: z.email("Invalid email address"),
-  passsword: z.string().min(15, "Password must be at least 15 characters"),
-});
+import { loginSchema, type User } from "~/lib/types";
+import { useSessionStorage } from "@uidotdev/usehooks";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [user] = useSessionStorage<User | null>("user", null);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
-      passsword: "",
+      password: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof loginSchema>) {}
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    console.info(values);
+    console.info({ user });
+    if (values.email === user?.email && values.password === user.password) {
+      console.log("working");
+      return navigate("/dashboard");
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4 py-12">
@@ -75,7 +80,7 @@ export default function LoginPage() {
               />
               <FormField
                 control={form.control}
-                name="passsword"
+                name="password"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
                     <FormLabel>Password</FormLabel>
