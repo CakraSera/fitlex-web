@@ -3,6 +3,7 @@ import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { MobileNav } from "~/components/mobile-nav";
 import { Link } from "react-router";
+import { useSessionStorage } from "@uidotdev/usehooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,12 @@ import { dummyCartItems } from "~/lib/data";
 
 export function Header() {
   const totalItems = dummyCartItems.length;
-  const user: UserType | null = null; // Replace with actual user state management
+  const [user, setUser] = useSessionStorage<UserType | null>("user", null);
+  // const user: UserType | null = null; // Replace with actual user state management
+
+  function logout() {
+    setUser(null);
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -74,7 +80,7 @@ export function Header() {
               className="relative h-8 w-8 sm:h-10 sm:w-10">
               <ShoppingCart className="h-4 w-4" />
               <span className="sr-only">Shopping cart</span>
-              {totalItems > 0 && (
+              {totalItems > 0 && user && (
                 <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                   {totalItems > 99 ? "99+" : totalItems}
                 </Badge>
@@ -96,16 +102,29 @@ export function Header() {
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {user?.name ?? ""}
+                      {user.fullName}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {user?.email ?? ""}
+                      {user.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/account" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Account</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => console.info("User Logout")}
+                  onClick={logout}
                   className="text-red-600 focus:text-red-600">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>

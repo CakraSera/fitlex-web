@@ -5,7 +5,7 @@ import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
 import { formatCurrency } from "~/lib/utils";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import type { CartItem, Product } from "~/lib/types";
+import type { CartItem } from "~/lib/types";
 import { dummyCartItems } from "~/lib/data";
 
 export default function CartPage() {
