@@ -63,15 +63,6 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Search Button - Hidden on mobile */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden sm:flex h-8 w-8 sm:h-10 sm:w-10">
-            <Search className="h-4 w-4" />
-            <span className="sr-only">Search</span>
-          </Button>
-
           {/* Cart Button */}
           <Link to="/cart">
             <Button
