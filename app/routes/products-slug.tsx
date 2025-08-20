@@ -15,7 +15,7 @@ import type { paths } from "~/generated/schema.d.ts";
 import { formatCurrency } from "~/lib/utils";
 import { ShoppingCart, Heart, Play, Check, Star } from "lucide-react";
 import type { Route } from "../+types/root";
-import type { Product } from "~/lib/types";
+import type { Product } from "~/modules/products/schema";
 // import { useToast } from "@/hooks/use-toast";
 
 const client = createClient<paths>({
@@ -40,8 +40,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
 export default function ProductPage({ loaderData }: ProductPageProps) {
   const { product } = loaderData;
-  const [quantity, setQuantity] = useState(product.stockQuantity);
-  const inStock = product.stockQuantity > 0;
+  const [quantity, setQuantity] = useState(product.stockQuantity ?? 1);
+  const inStock = (product.stockQuantity ?? 0) > 0;
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
 

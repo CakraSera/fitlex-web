@@ -28,7 +28,7 @@ import {
 
 import createClient from "openapi-fetch";
 import type { paths } from "~/generated/schema.d.ts";
-import type { Product } from "~/lib/types";
+import type { Product } from "~/modules/products/schema";
 
 const client = createClient<paths>({
   baseUrl: import.meta.env.VITE_BACKEND_API_URL,
@@ -40,9 +40,7 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
 }
 
 export default function ProductsPage({ loaderData }: Route.ComponentProps) {
-  const { products } = loaderData as {
-    products?: Product[];
-  };
+  const { products } = loaderData;
 
   if (!products) {
     return (
@@ -327,7 +325,10 @@ export default function ProductsPage({ loaderData }: Route.ComponentProps) {
             {/* Sort and View Controls */}
             <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-4 mb-6">
               <div className="flex items-center gap-2">
-                <MobileSearch onSearch={handleMobileSearch} products={products}/>
+                <MobileSearch
+                  onSearch={handleMobileSearch}
+                  products={products}
+                />
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="w-full xs:w-48">
                     <SelectValue placeholder="Sort by" />

@@ -1,9 +1,4 @@
-import type { User, CartItem } from "./types";
-
-export const user: User = {
-  name: "John Doe",
-  email: "johndoe@gmail.com",
-};
+import type { CartItem } from "./types";
 
 export const dummyCartItems: CartItem[] = [
   {
