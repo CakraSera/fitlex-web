@@ -1,4 +1,4 @@
-import type { CartItem } from "./types";
+import type { CartItem, User } from "./types";
 
 export const dummyCartItems: CartItem[] = [
   {
@@ -68,5 +68,25 @@ export const dummyCartItems: CartItem[] = [
       primaryIndexUrl: 0,
     }, // Adjustable Dumbbells Compact
     quantity: 1,
+  },
+];
+
+export const user: User = {
+  fullName: "Rakhel Cakra Kusumadinata Sera",
+  email: "rakhel.sera@gmail.com",
+};
+
+type NavigationType = {
+  to: string;
+  title: string;
+};
+export const NavigationLink: NavigationType[] = [
+  {
+    to: "/home",
+    title: "Home",
+  },
+  {
+    to: "/products",
+    title: "Products",
   },
 ];

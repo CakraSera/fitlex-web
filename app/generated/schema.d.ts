@@ -52,21 +52,17 @@ export interface paths {
                              * @example true
                              */
                             featuredProduct: boolean;
-                            /**
-                             * @description The URL of the product image
-                             * @example https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/
-                             */
-                            imageUrl?: string | null;
+                            imageUrls: (string | null)[];
                             /**
                              * @description The stock quantity of the product
                              * @example 10
                              */
-                            stockQuantity?: number;
+                            stockQuantity: number;
                             /**
                              * @description A brief description of the product
                              * @example A versatile kettlebell that can be collapsed for easy storage.
                              */
-                            description?: string | null;
+                            description?: string;
                         }[];
                     };
                 };
@@ -128,21 +124,17 @@ export interface paths {
                              * @example true
                              */
                             featuredProduct: boolean;
-                            /**
-                             * @description The URL of the product image
-                             * @example https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/
-                             */
-                            imageUrl?: string | null;
+                            imageUrls: (string | null)[];
                             /**
                              * @description The stock quantity of the product
                              * @example 10
                              */
-                            stockQuantity?: number;
+                            stockQuantity: number;
                             /**
                              * @description A brief description of the product
                              * @example A versatile kettlebell that can be collapsed for easy storage.
                              */
-                            description?: string | null;
+                            description?: string;
                         }[];
                     };
                 };
@@ -207,26 +199,373 @@ export interface paths {
                              * @example true
                              */
                             featuredProduct: boolean;
-                            /**
-                             * @description The URL of the product image
-                             * @example https://ucarecdn.com/44c7132b-a8dc-46cc-8d60-02aeba15dc3e/-/preview/200x200/
-                             */
-                            imageUrl?: string | null;
+                            imageUrls: (string | null)[];
                             /**
                              * @description The stock quantity of the product
                              * @example 10
                              */
-                            stockQuantity?: number;
+                            stockQuantity: number;
                             /**
                              * @description A brief description of the product
                              * @example A versatile kettlebell that can be collapsed for easy storage.
                              */
-                            description?: string | null;
+                            description?: string;
                         };
                     };
                 };
                 /** @description Product not found */
                 404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description List of Users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            /**
+                             * @description Nickname of the user, used for login
+                             * @example cakra
+                             */
+                            username: string;
+                            /**
+                             * @description The user's full, legal name
+                             * @example Cakra Buana
+                             */
+                            fullName: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        }[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description User by ID */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            /**
+                             * @description Nickname of the user, used for login
+                             * @example cakra
+                             */
+                            username: string;
+                            /**
+                             * @description The user's full, legal name
+                             * @example Cakra Buana
+                             */
+                            fullName: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        };
+                    };
+                };
+                /** @description 404 not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        fullName: string;
+                        username: string;
+                        /** Format: email */
+                        email: string;
+                        password: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Private Data User */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            /**
+                             * @description Nickname of the user, used for login
+                             * @example cakra
+                             */
+                            username: string;
+                            /**
+                             * @description The user's full, legal name
+                             * @example Cakra Buana
+                             */
+                            fullName: string;
+                            /**
+                             * Format: email
+                             * @description The user's email address
+                             * @example cakra.buana@example.com
+                             */
+                            email: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        };
+                    };
+                };
+                /** @description Register user failed */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        email: string;
+                        password: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Login Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            email: string;
+                            password: string;
+                        };
+                    };
+                };
+                /** @description Login Failed */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header: {
+                    Authorization: string;
+                };
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get authenticated user success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            /**
+                             * @description Nickname of the user, used for login
+                             * @example cakra
+                             */
+                            username: string;
+                            /**
+                             * @description The user's full, legal name
+                             * @example Cakra Buana
+                             */
+                            fullName: string;
+                            /**
+                             * Format: email
+                             * @description The user's email address
+                             * @example cakra.buana@example.com
+                             */
+                            email: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        };
+                    };
+                };
+                /** @description User not found */
+                400: {
                     headers: {
                         [name: string]: unknown;
                     };
