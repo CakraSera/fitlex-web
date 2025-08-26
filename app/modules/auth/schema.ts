@@ -15,7 +15,9 @@ export const registerSchema = userSchema
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
+
 export type Register = z.infer<typeof registerSchema>;
+
 export const loginSchema = userSchema.pick({
   email: true,
   password: true,

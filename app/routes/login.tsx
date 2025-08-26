@@ -1,4 +1,3 @@
-import type React from "react";
 import z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,13 +21,13 @@ import {
 } from "~/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { loginSchema, type User } from "~/lib/types";
-import { useSessionStorage } from "@uidotdev/usehooks";
+import { loginSchema } from "~/modules/auth/schema";
+import { clientOpenApi } from "~/lib/client-openapi";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [user] = useSessionStorage<User | null>("user", null);
+  // const [user] = useSessionStorage<User | null>("user", null);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -39,11 +38,19 @@ export default function LoginPage() {
   });
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     console.info(values);
-    console.info({ user });
-    if (values.email === user?.email && values.password === user.password) {
-      console.log("working");
-      return navigate("/dashboard");
-    }
+    const loginSchema = {
+      email: String(values.email),
+      password: String(values.password),
+    };
+
+    const { data, error } = await clientOpenApi.POST("/auth/login", {
+      body: loginSchema,
+    });
+    console.info({ data });
+    // if (values.email === user?.email && values.password === user.password) {
+    //   console.log("working");
+    //   return navigate("/dashboard");
+    // }
   }
 
   return (

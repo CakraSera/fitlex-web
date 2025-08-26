@@ -1,4 +1,3 @@
-import z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
@@ -25,12 +24,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { registerSchema, type Register } from "~/modules/auth/schema";
 import { type User } from "~/modules/user/schema";
-import createClient from "openapi-fetch";
-import type { paths } from "~/generated/schema.d.ts";
-
-const client = createClient<paths>({
-  baseUrl: import.meta.env.VITE_BACKEND_API_URL,
-});
+import { clientOpenApi } from "~/lib/client-openapi";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -57,11 +51,11 @@ export default function RegisterPage() {
       password: String(values.password),
     };
 
-    console.table(user);
-
-    const { data, error } = await client.POST("/auth/register", {
+    const { data, error } = await clientOpenApi.POST("/auth/register", {
       body: registerUserData,
     });
+
+    // TODO: How to add cookies to browser
 
     console.log({ data });
     if (data) {
