@@ -1,16 +1,13 @@
-"use client";
-
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { ShoppingCart, Package, User, TrendingUp } from "lucide-react";
-import { useSessionStorage } from "@uidotdev/usehooks";
 import { Link } from "react-router";
 import { dummyCartItems } from "~/lib/data";
-import { type CartItem, type User as UserType } from "~/lib/types";
+import { type CartItem } from "~/lib/types";
 
 // import { ProtectedRoute } from "@/components/protected-route";
 
 export default function DashboardPage() {
-  const [user] = useSessionStorage<UserType | null>("user", null);
+  // const [user] = useSessionStorage<UserType | null>("user", null);
   const items: CartItem[] = dummyCartItems;
 
   const stats = [
@@ -58,7 +55,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {user?.fullName || "User"}!
+            Welcome back, User!
           </h1>
           <p className="text-gray-600 mt-2">
             Here's your workout equipment dashboard

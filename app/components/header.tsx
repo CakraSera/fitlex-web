@@ -3,7 +3,6 @@ import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { MobileNav } from "~/components/mobile-nav";
 import { Link } from "react-router";
-import { useSessionStorage } from "@uidotdev/usehooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,16 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import type { User as UserType } from "~/lib/types";
 import { dummyCartItems } from "~/lib/data";
 
 export function Header() {
+  const user = null;
   const totalItems = dummyCartItems.length;
-  const [user, setUser] = useSessionStorage<UserType | null>("user", null);
+  // const [user, setUser] = useSessionStorage<UserType | null>("user", null);
   // const user: UserType | null = null; // Replace with actual user state management
 
   function logout() {
-    setUser(null);
+    // setUser(null);
   }
 
   return (
@@ -71,7 +70,7 @@ export function Header() {
               className="relative h-8 w-8 sm:h-10 sm:w-10">
               <ShoppingCart className="h-4 w-4" />
               <span className="sr-only">Shopping cart</span>
-              {totalItems > 0 && user && (
+              {totalItems > 0 && (
                 <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                   {totalItems > 99 ? "99+" : totalItems}
                 </Badge>
@@ -93,10 +92,10 @@ export function Header() {
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {user.fullName}
+                      {/* {user.fullName} */}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {user.email}
+                      {/* {user.email} */}
                     </p>
                   </div>
                 </DropdownMenuLabel>

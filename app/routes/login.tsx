@@ -23,6 +23,9 @@ import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "~/modules/auth/schema";
 import { clientOpenApi } from "~/lib/client-openapi";
+import { toast } from "sonner";
+
+// import { getSession, commitSession } from "../sessions.server";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -43,14 +46,21 @@ export default function LoginPage() {
       password: String(values.password),
     };
 
-    const { data, error } = await clientOpenApi.POST("/auth/login", {
-      body: loginSchema,
-    });
-    console.info({ data });
-    // if (values.email === user?.email && values.password === user.password) {
-    //   console.log("working");
-    //   return navigate("/dashboard");
-    // }
+    // TODO: Try catch?
+    try {
+      const { error, response } = await clientOpenApi.POST("/auth/login", {
+        body: loginSchema,
+      });
+      if (!response.ok) {
+        console.info({ error });
+        toast.error(error);
+        return null;
+      }
+      return navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   return (
