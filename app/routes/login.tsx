@@ -1,7 +1,7 @@
 import z from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router";
+import { data, Link, redirect, useNavigate } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -22,10 +22,63 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "~/modules/auth/schema";
+import type { Route } from "./+types/login";
 import { clientOpenApi } from "~/lib/client-openapi";
 import { toast } from "sonner";
 
-// import { getSession, commitSession } from "../sessions.server";
+import { getSession, commitSession } from "../sessions.server";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("token")) {
+    // Redirect to the home page if they are already signed in.
+    return redirect("/");
+  }
+
+  return data(
+    { error: session.get("error") },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const formData = await request.formData();
+  const loginSchema = {
+    email: String(formData.get("email")),
+    password: String(formData.get("password")),
+  };
+  // TODO: Try catch?
+  try {
+    const { data, error, response } = await clientOpenApi.POST("/auth/login", {
+      body: loginSchema,
+    });
+    if (!response.ok) {
+      session.flash("error", "Invalid username/password");
+      // Redirect back to the login page with errors.
+      return redirect("/login", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }
+
+    console.log({ data });
+    session.set("token", String(data?.token));
+    console.log(session);
+    return redirect("/dashboard", {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -39,29 +92,6 @@ export default function LoginPage() {
       password: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.info(values);
-    const loginSchema = {
-      email: String(values.email),
-      password: String(values.password),
-    };
-
-    // TODO: Try catch?
-    try {
-      const { error, response } = await clientOpenApi.POST("/auth/login", {
-        body: loginSchema,
-      });
-      if (!response.ok) {
-        console.info({ error });
-        toast.error(error);
-        return null;
-      }
-      return navigate("/dashboard");
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4 py-12">
@@ -76,7 +106,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form method="post" className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"

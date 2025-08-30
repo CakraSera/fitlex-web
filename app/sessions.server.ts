@@ -17,9 +17,9 @@ const { getSession, commitSession, destroySession } =
       // Expires can also be set (although maxAge overrides it when used in combination).
       // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
       //
-      expires: new Date(Date.now() + 60_000),
+      // expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       httpOnly: true,
-      maxAge: 60,
+      maxAge: 604800,
       path: "/",
       sameSite: "lax",
       secrets: [String(process.env.COOKIE_SECRET_KEY)],

@@ -483,8 +483,7 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            email: string;
-                            password: string;
+                            token: string;
                         };
                     };
                 };
