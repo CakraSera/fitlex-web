@@ -1,13 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { ShoppingCart, Package, User, TrendingUp } from "lucide-react";
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
+import { clientOpenApi } from "~/lib/client-openapi";
 import { dummyCartItems } from "~/lib/data";
 import { type CartItem } from "~/lib/types";
+import type { Route } from "./+types/dashboard";
+import { getSession } from "~/sessions.server";
 
-// import { ProtectedRoute } from "@/components/protected-route";
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+  if (!token) {
+    return redirect("/");
+  }
+  const { data, error, response } = await clientOpenApi.GET("/auth/me", {
+    params: {
+      header: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  });
+  if (!response.ok) {
+    console.error(error);
+  }
+  console.log("🚀 ~ loader ~ data:", data);
+  return { user: data };
+}
 
-export default function DashboardPage() {
-  // const [user] = useSessionStorage<UserType | null>("user", null);
+export default function DashboardPage({ loaderData }: Route.ComponentProps) {
+  const { user } = loaderData;
   const items: CartItem[] = dummyCartItems;
 
   const stats = [
@@ -55,7 +76,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, User!
+            Welcome back, {user?.username}!
           </h1>
           <p className="text-gray-600 mt-2">
             Here's your workout equipment dashboard
