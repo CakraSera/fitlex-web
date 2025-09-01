@@ -16,6 +16,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const { data, error, response } = await clientOpenApi.GET("/auth/me", {
     params: {
       header: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     },

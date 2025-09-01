@@ -13,13 +13,13 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { dummyCartItems } from "~/lib/data";
 
-export function Header() {
+export function Header({ userAccess }: { userAccess: boolean }) {
   const user = null;
   const totalItems = dummyCartItems.length;
   // const [user, setUser] = useSessionStorage<UserType | null>("user", null);
   // const user: UserType | null = null; // Replace with actual user state management
 
-  function logout() {
+  async function logout() {
     // setUser(null);
   }
 
@@ -77,7 +77,7 @@ export function Header() {
               )}
             </Button>
           </Link>
-          {user ? (
+          {userAccess ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
