@@ -24,7 +24,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (!response.ok) {
     console.error(error);
   }
-  console.log("🚀 ~ loader ~ data:", data);
   return { user: data };
 }
 

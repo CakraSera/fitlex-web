@@ -1,8 +1,8 @@
-import { ShoppingCart, Search, LogOut, User } from "lucide-react";
+import { ShoppingCart, LogOut, User } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { MobileNav } from "~/components/mobile-nav";
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import type { Route } from "../layouts/+types/layout-main";
 import { dummyCartItems } from "~/lib/data";
+// import { destroySession, getSession } from "~/sessions.server";
+
+export async function action({ request }: Route.ActionArgs) {
+  return null;
+}
 
 export function Header({ userAccess }: { userAccess: boolean }) {
-  const user = null;
   const totalItems = dummyCartItems.length;
   // const [user, setUser] = useSessionStorage<UserType | null>("user", null);
   // const user: UserType | null = null; // Replace with actual user state management
@@ -70,7 +75,7 @@ export function Header({ userAccess }: { userAccess: boolean }) {
               className="relative h-8 w-8 sm:h-10 sm:w-10">
               <ShoppingCart className="h-4 w-4" />
               <span className="sr-only">Shopping cart</span>
-              {totalItems > 0 && (
+              {totalItems > 0 && userAccess && (
                 <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                   {totalItems > 99 ? "99+" : totalItems}
                 </Badge>
@@ -113,12 +118,18 @@ export function Header({ userAccess }: { userAccess: boolean }) {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                {/* <form method="post"> */}
                 <DropdownMenuItem
-                  onClick={logout}
+                  asChild
                   className="text-red-600 focus:text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  {/* <button type="submit"> */}
+                  <Link to="/logout">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </Link>
+                  {/* </button> */}
                 </DropdownMenuItem>
+                {/* </form> */}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (

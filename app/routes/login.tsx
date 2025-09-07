@@ -59,6 +59,7 @@ export async function action({ request }: Route.ActionArgs) {
       body: loginSchema,
     });
     if (!response.ok) {
+      console.log(error);
       session.flash("error", "Invalid username/password");
       // Redirect back to the login page with errors.
       return redirect("/login", {
@@ -67,10 +68,7 @@ export async function action({ request }: Route.ActionArgs) {
         },
       });
     }
-
-    console.log({ data });
     session.set("token", String(data?.token));
-    console.log(session);
     return redirect("/dashboard", {
       headers: { "Set-Cookie": await commitSession(session) },
     });
@@ -81,7 +79,6 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   // const [user] = useSessionStorage<User | null>("user", null);
 

@@ -162,29 +162,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </div>
         </div>
       </section>
-
-      {/* Bundle Packages Section */}
-      {/* <section className="py-20">
-        <div className="container">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Solution-Based Bundles
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Curated workout packages designed for specific goals and
-              lifestyles
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {bundlePackages.map((bundle) => (
-              <BundleCard key={bundle.id} bundle={bundle} />
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Featured Products Section */}
       <section id="featured" className="py-20 bg-muted/30">
         <div className="container">
           <div className="text-center space-y-4 mb-12">

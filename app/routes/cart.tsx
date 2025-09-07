@@ -1,23 +1,57 @@
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
 import { formatCurrency } from "~/lib/utils";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import type { CartItem } from "~/lib/types";
-import { dummyCartItems } from "~/lib/data";
+import type { Route } from "./+types/cart";
+import { getSession } from "~/sessions.server";
+import { clientOpenApi } from "~/lib/client-openapi";
+import type { CartItem } from "~/modules/cart/schema";
 
-export default function CartPage() {
-  const items: CartItem[] = dummyCartItems;
-  const totalPrice = items.reduce(
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+  return { token };
+}
+
+export async function clientLoader({ serverLoader }: Route.ClientActionArgs) {
+  const { token } = await serverLoader();
+  console.log("🚀 ~ clientLoader ~ token:", token);
+  const { data, error, response } = await clientOpenApi.GET("/cart", {
+    params: {
+      header: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  });
+  if (!response.ok) {
+    console.error(error);
+  }
+
+  const cartItems: CartItem[] = data?.items;
+
+  return cartItems;
+}
+
+// HydrateFallback is rendered while the client loader is running
+export function HydrateFallback() {
+  return <div>Loading...</div>;
+}
+
+export default function CartPage({ loaderData }: Route.ComponentProps) {
+  const cartItems = loaderData;
+  console.log("🚀 ~ CartPage ~ cartItems:", cartItems);
+  const totalPrice = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
   );
-  const totalItems = items.length;
+  const totalItems = cartItems.length;
   const finalTotal = totalPrice;
 
-  if (items.length === 0) {
+  if (cartItems.length === 0) {
     return (
       <div className="min-h-screen py-16">
         <div className="container">
@@ -65,7 +99,7 @@ export default function CartPage() {
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
+            {cartItems.map((item) => (
               <Card key={item.product.id}>
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex gap-3 sm:gap-4">

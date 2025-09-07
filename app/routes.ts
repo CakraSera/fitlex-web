@@ -14,6 +14,7 @@ export default [
       route("/:slug", "routes/products-slug.tsx"),
     ]),
     route("login", "routes/login.tsx"),
+    route("logout", "routes/logout.tsx"),
     route("register", "routes/register.tsx"),
     route("dashboard", "routes/dashboard.tsx"),
     route("account", "routes/account.tsx"),

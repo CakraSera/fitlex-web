@@ -2,7 +2,7 @@ import { Outlet } from "react-router";
 import { Toaster } from "sonner";
 import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
-import type { Route } from "../+types/root";
+import type { Route } from "../layouts/+types/layout-main";
 import { getSession } from "~/sessions.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
