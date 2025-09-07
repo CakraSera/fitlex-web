@@ -13,12 +13,6 @@ import type { CartItem } from "~/modules/cart/schema";
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
-  return { token };
-}
-
-export async function clientLoader({ serverLoader }: Route.ClientActionArgs) {
-  const { token } = await serverLoader();
-  console.log("🚀 ~ clientLoader ~ token:", token);
   const { data, error, response } = await clientOpenApi.GET("/cart", {
     params: {
       header: {
@@ -32,18 +26,13 @@ export async function clientLoader({ serverLoader }: Route.ClientActionArgs) {
   }
 
   const cartItems: CartItem[] = data?.items;
+  console.log("🚀 ~ clientLoader ~ cartItems:", cartItems);
 
   return cartItems;
 }
 
-// HydrateFallback is rendered while the client loader is running
-export function HydrateFallback() {
-  return <div>Loading...</div>;
-}
-
 export default function CartPage({ loaderData }: Route.ComponentProps) {
   const cartItems = loaderData;
-  console.log("🚀 ~ CartPage ~ cartItems:", cartItems);
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
