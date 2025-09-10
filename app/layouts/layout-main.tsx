@@ -8,6 +8,7 @@ import { getSession } from "~/sessions.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
+  
   return { userAccess: session.has("token") };
 }
 

@@ -53,7 +53,6 @@ export async function action({ request }: Route.ActionArgs) {
     email: String(formData.get("email")),
     password: String(formData.get("password")),
   };
-  // TODO: Try catch?
   try {
     const { data, error, response } = await clientOpenApi.POST("/auth/login", {
       body: loginSchema,

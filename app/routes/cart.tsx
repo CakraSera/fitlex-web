@@ -99,7 +99,7 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                         width={96}
                         height={96}
                         className="w-full h-full object-cover rounded-lg"
-                      />
+                      />  
                     </div>
 
                     <div className="flex-1 space-y-2 min-w-0">

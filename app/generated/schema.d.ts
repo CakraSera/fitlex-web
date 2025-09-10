@@ -527,38 +527,13 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            /**
-                             * @description ID of the user, a unique identifier
-                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
-                             */
                             id: string;
-                            /**
-                             * @description Nickname of the user, used for login
-                             * @example cakra
-                             */
-                            username: string;
-                            /**
-                             * @description The user's full, legal name
-                             * @example Cakra Buana
-                             */
                             fullName: string;
-                            /**
-                             * Format: email
-                             * @description The user's email address
-                             * @example cakra.buana@example.com
-                             */
+                            /** Format: email */
                             email: string;
-                            /**
-                             * Format: date
-                             * @description The UTC timestamp of when the user account was created
-                             * @example 2023-10-27T10:00:00Z
-                             */
+                            /** Format: date */
                             createdAt: string;
-                            /**
-                             * Format: date
-                             * @description The UTC timestamp of the last time the user account was updated
-                             * @example 2023-10-27T10:30:00Z
-                             */
+                            /** Format: date */
                             updatedAt: string;
                         };
                     };
