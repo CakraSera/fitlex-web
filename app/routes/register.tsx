@@ -38,7 +38,6 @@ export async function action({ request }: Route.ActionArgs) {
     confirmPassword: formData.get("confirmPassword") as string,
   };
 
-  console.log({ registerData });
   // Validate the data
   const validation = registerSchema.safeParse(registerData);
   if (!validation.success) {
@@ -61,10 +60,6 @@ export async function action({ request }: Route.ActionArgs) {
         },
       }
     );
-
-    console.log({ response });
-
-    console.log({ data });
 
     if (error) {
       return {

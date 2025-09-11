@@ -19,11 +19,13 @@ export async function action({ request }: Route.ActionArgs) {
   return null;
 }
 
-export function Header({ userAccess }: { userAccess: boolean }) {
-  const totalItems = dummyCartItems.length;
-  // const [user, setUser] = useSessionStorage<UserType | null>("user", null);
-  // const user: UserType | null = null; // Replace with actual user state management
-
+export function Header({
+  userAccess,
+  totalItems,
+}: {
+  userAccess: boolean;
+  totalItems: number;
+}) {
   async function logout() {
     // setUser(null);
   }
