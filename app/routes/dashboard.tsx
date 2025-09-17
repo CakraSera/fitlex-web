@@ -5,7 +5,7 @@ import { clientOpenApi } from "~/lib/client-openapi";
 import { dummyCartItems } from "~/lib/data";
 import { type CartItem } from "~/lib/types";
 import type { Route } from "./+types/dashboard";
-import { getSession } from "~/sessions.server";
+import { destroySession, getSession } from "~/sessions.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -23,6 +23,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   });
   if (!response.ok) {
     console.error(error);
+    return redirect("/login", {
+      headers: {
+        "Set-Cookie": await destroySession(session),
+      },
+    });
   }
   return { user: data };
 }

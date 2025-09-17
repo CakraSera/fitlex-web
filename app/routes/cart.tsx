@@ -8,7 +8,6 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import type { Route } from "./+types/cart";
 import { getSession } from "~/sessions.server";
 import { clientOpenApi } from "~/lib/client-openapi";
-import type { CartItem } from "~/modules/cart/schema";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -25,7 +24,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     console.error(error);
   }
 
-  const cartItems: CartItem[] = data?.items;
+  const cartItems = data?.items ?? [];
 
   return cartItems;
 }

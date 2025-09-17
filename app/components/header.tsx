@@ -12,8 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import type { Route } from "../layouts/+types/layout-main";
-import { dummyCartItems } from "~/lib/data";
-// import { destroySession, getSession } from "~/sessions.server";
 
 export async function action({ request }: Route.ActionArgs) {
   return null;
