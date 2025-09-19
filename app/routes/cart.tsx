@@ -29,6 +29,37 @@ export async function loader({ request }: Route.LoaderArgs) {
   return cartItems;
 }
 
+export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
+  const formData = await request.formData();
+  const deleteItemCart = {
+    id: String(formData.get("itemId")),
+  };
+  try {
+    const { data, error, response } = await clientOpenApi.DELETE(
+      `/cart/items/${deleteItemCart.id}`,
+      {
+        params: {
+          header: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    );
+    if (!response.ok) {
+      console.log(error);
+      session.flash("error", "Invalid username/password");
+    }
+    console.log(data);
+    return null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export default function CartPage({ loaderData }: Route.ComponentProps) {
   const cartItems = loaderData;
   const totalPrice = cartItems.reduce(
@@ -72,7 +103,6 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
   return (
     <div className="min-h-screen py-8">
       <div className="container">
-        {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Link to="/">
             <Button variant="ghost" size="icon">
@@ -91,21 +121,25 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex gap-3 sm:gap-4">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
-                      <img
-                        src={item.product.imageUrls[0] || "/placeholder.svg"}
-                        alt={item.product.name}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
+                      <Link to="/products">
+                        <img
+                          src={item.product.imageUrls[0] || "/placeholder.svg"}
+                          alt={item.product.name}
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </Link>
                     </div>
 
                     <div className="flex-1 space-y-2 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-sm sm:text-base lg:text-lg truncate">
-                            {item.product.name}
-                          </h3>
+                          <Link to="/products">
+                            <h3 className="font-semibold text-sm sm:text-base lg:text-lg truncate">
+                              {item.product.name}
+                            </h3>
+                          </Link>
                           <p className="text-xs sm:text-sm text-muted-foreground">
                             SKU: {item.product.sku}
                           </p>
@@ -113,16 +147,20 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                             {item.product.category}
                           </p>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 sm:h-10 sm:w-10 text-destructive hover:text-destructive flex-shrink-0"
-                          // onClick={() =>
-                          //   handleRemoveItem(item.product.id, item.product.name)
-                          // }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <form method="post">
+                          <Input type="hidden" name="itemId" value={item.id} />
+                          <Button
+                            variant="ghost"
+                            type="submit"
+                            size="icon"
+                            className="h-8 w-8 sm:h-10 sm:w-10 text-destructive hover:text-destructive flex-shrink-0"
+                            // onClick={() =>
+                            //   handleRemoveItem(item.product.id, item.product.name)
+                            // }
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </form>
                       </div>
 
                       <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3">
