@@ -50,7 +50,7 @@ export async function action({ request }: Route.ActionArgs) {
     productId: String(formData.get("productId")),
     quantity: Number(formData.get("quantity")),
   };
-  // TODO: Try catch?
+
   try {
     const { data, error, response } = await clientOpenApi.POST("/cart/items", {
       params: {
@@ -78,7 +78,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function ProductPage({ loaderData }: ProductPageProps) {
   const { product } = loaderData;
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
   const inStock = (product.stockQuantity ?? 0) > 0;
   const [selectedImage, setSelectedImage] = useState<number>(0);
 

@@ -80,19 +80,16 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
               Looks like you haven't added any items to your cart yet.
             </p>
             <div className="space-y-3">
-              <Link to="/products">
-                <Button size="lg" className="w-full">
-                  Continue Shopping
-                </Button>
-              </Link>
-              <Link to="/">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full bg-transparent">
-                  Back to Home
-                </Button>
-              </Link>
+              <Button size="lg" className="w-full" asChild>
+                <Link to="/products">Continue Shopping</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full bg-transparent"
+                asChild>
+                <Link to="/">Back to Home</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -104,11 +101,11 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
     <div className="min-h-screen py-8">
       <div className="container">
         <div className="flex items-center gap-4 mb-8">
-          <Link to="/">
-            <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/products">
               <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <h1 className="text-3xl font-bold">Shopping Cart</h1>
           <span className="text-muted-foreground">({totalItems} items)</span>
         </div>
@@ -121,7 +118,7 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                 <CardContent className="p-4 sm:p-6">
                   <div className="flex gap-3 sm:gap-4">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
-                      <Link to="/products">
+                      <Link to={`/products/${item.product.slug}`}>
                         <img
                           src={item.product.imageUrls[0] || "/placeholder.svg"}
                           alt={item.product.name}
@@ -135,7 +132,7 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                     <div className="flex-1 space-y-2 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <div className="min-w-0 flex-1">
-                          <Link to="/products">
+                          <Link to={`/products/${item.product.slug}`}>
                             <h3 className="font-semibold text-sm sm:text-base lg:text-lg truncate">
                               {item.product.name}
                             </h3>
