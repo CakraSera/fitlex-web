@@ -24,7 +24,6 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "~/modules/auth/schema";
 import type { Route } from "./+types/login";
 import { clientOpenApi } from "~/lib/client-openapi";
-import { toast } from "sonner";
 
 import { getSession, commitSession } from "../sessions.server";
 
@@ -77,9 +76,9 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export default function LoginPage() {
+export default function LoginPage({ loaderData }: Route.ComponentProps) {
   const [showPassword, setShowPassword] = useState(false);
-  // const [user] = useSessionStorage<User | null>("user", null);
+  const { error } = loaderData;
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -153,6 +152,12 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
+              {error ? (
+                <div className="mt-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2 flex">
+                  {error}
+                </div>
+              ) : null}
+
               <Button type="submit" className="w-full">
                 Submit
               </Button>
