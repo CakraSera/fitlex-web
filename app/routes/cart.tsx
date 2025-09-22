@@ -1,4 +1,4 @@
-import { Link, redirect } from "react-router";
+import { Link, data as dataRouter, useFetcher } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
@@ -31,7 +31,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  const method = request.method.toLowerCase();
   const token = session.get("token");
   const formData = await request.formData();
 
@@ -44,7 +43,7 @@ export async function action({ request }: Route.ActionArgs) {
         id: String(formData.get("itemId")),
       };
       try {
-        const { data, error, response } = await clientOpenApi.DELETE(
+        const { error, response } = await clientOpenApi.DELETE(
           `/cart/items/{cart_item_id}`,
           {
             params: {
@@ -62,8 +61,7 @@ export async function action({ request }: Route.ActionArgs) {
           console.log(error);
           session.flash("error", "Invalid username/password");
         }
-        console.log(data);
-        return null;
+        return dataRouter({ quantityItem: 4 });
       } catch (error) {
         console.error(error);
         return null;
@@ -75,35 +73,40 @@ export async function action({ request }: Route.ActionArgs) {
         quantity: Number(formData.get("quantity")),
       };
       const intent = formData.get("intent") as string;
-      console.log(intent);
+
       if (intent === "increase") {
-        const { data, error, response } = await clientOpenApi.PATCH(
-          `/cart/items/{cart_item_id}`,
-          {
-            params: {
-              path: {
-                cart_item_id: updateItemCart.id,
-              },
-              header: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: {
-                quantity: updateItemCart.quantity + 1,
-              },
+        updateItemCart.quantity++;
+      } else if (intent === "decrease") {
+        updateItemCart.quantity--;
+      }
+      const { error, response } = await clientOpenApi.PATCH(
+        `/cart/items/{cart_item_id}`,
+        {
+          params: {
+            path: {
+              cart_item_id: updateItemCart.id,
             },
-          }
-        );
-        if (!response.ok) {
-          console.log(error);
-          session.flash("error", "Invalid increase data");
+            header: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+          body: {
+            quantity: updateItemCart.quantity,
+          },
         }
+      );
+
+      if (!response.ok) {
+        console.log(error);
+        session.flash("error", "Invalid increase data");
       }
     }
   }
 }
 
 export default function CartPage({ loaderData }: Route.ComponentProps) {
+  const fetcher = useFetcher<typeof action>();
   const cartItems = loaderData;
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
@@ -111,10 +114,6 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
   );
   const totalItems = cartItems.length;
   const finalTotal = totalPrice;
-
-  function addQuantityItem() {
-    console.log("");
-  }
 
   if (cartItems.length === 0) {
     return (
@@ -191,12 +190,12 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                             {item.product.category}
                           </p>
                         </div>
-                        <form method="post">
+                        <fetcher.Form method="post">
                           <Input type="hidden" name="itemId" value={item.id} />
                           <Input
                             type="hidden"
                             name="actionType"
-                            defaultValue="updateItemCart"
+                            defaultValue="deleteItemCart"
                           />
                           <Button
                             variant="ghost"
@@ -209,11 +208,11 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
-                        </form>
+                        </fetcher.Form>
                       </div>
 
                       <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3">
-                        <form method="post">
+                        <fetcher.Form method="post">
                           <div className="flex items-center gap-2">
                             <Input
                               type="hidden"
@@ -236,11 +235,12 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                             </Button>
                             <Input
                               name="quantity"
-                              type="number"
-                              min="1"
+                              type="text"
+                              readOnly
                               value={item.quantity}
                               className="w-14 sm:w-16 h-7 sm:h-8 text-center text-sm"
                             />
+
                             <Button
                               name="intent"
                               value="increase"
@@ -250,7 +250,7 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                               <Plus className="h-3 w-3" />
                             </Button>
                           </div>
-                        </form>
+                        </fetcher.Form>
 
                         <div className="text-left xs:text-right">
                           <p className="text-xs sm:text-sm text-muted-foreground">
