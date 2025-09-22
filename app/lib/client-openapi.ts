@@ -1,4 +1,4 @@
-import createClient, { type Middleware } from "openapi-fetch";
+import createClient from "openapi-fetch";
 import type { paths } from "~/generated/schema.d.ts";
 
 export const clientOpenApi = createClient<paths>({

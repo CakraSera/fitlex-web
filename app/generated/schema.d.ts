@@ -531,9 +531,17 @@ export interface paths {
                             fullName: string;
                             /** Format: email */
                             email: string;
-                            /** Format: date */
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
                             createdAt: string;
-                            /** Format: date */
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
                             updatedAt: string;
                         };
                     };
@@ -628,9 +636,17 @@ export interface paths {
                                     description?: string;
                                 };
                                 cartId: string;
-                                /** Format: date */
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of when the user account was created
+                                 * @example 2023-10-27T10:00:00Z
+                                 */
                                 createdAt: string;
-                                /** Format: date */
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of the last time the user account was updated
+                                 * @example 2023-10-27T10:30:00Z
+                                 */
                                 updatedAt: string;
                             }[];
                             /**
@@ -741,9 +757,17 @@ export interface paths {
                                     description?: string;
                                 };
                                 cartId: string;
-                                /** Format: date */
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of when the user account was created
+                                 * @example 2023-10-27T10:00:00Z
+                                 */
                                 createdAt: string;
-                                /** Format: date */
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of the last time the user account was updated
+                                 * @example 2023-10-27T10:30:00Z
+                                 */
                                 updatedAt: string;
                             }[];
                             /**
@@ -761,7 +785,7 @@ export interface paths {
                         };
                     };
                 };
-                /** @description Failed to add item to chart */
+                /** @description Failed to add item to cart */
                 400: {
                     headers: {
                         [name: string]: unknown;
@@ -774,6 +798,237 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/cart/items/{cart_item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header: {
+                    Authorization: string;
+                };
+                path: {
+                    cart_item_id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Succesfully delete cart item */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            items: {
+                                id: string;
+                                quantity: number;
+                                productId: string;
+                                product: {
+                                    /**
+                                     * @description The unique identifier for the product
+                                     * @example 01H8MECHZX3TBDSZ7XRADM79XV
+                                     */
+                                    id: string;
+                                    /**
+                                     * @description The slug for the product
+                                     * @example collapsible-kettlebell
+                                     */
+                                    slug: string;
+                                    /**
+                                     * @description The name of the product
+                                     * @example Collapsible Kettlebell
+                                     */
+                                    name: string;
+                                    /**
+                                     * @description The price of the product
+                                     * @example 10000
+                                     */
+                                    price: number;
+                                    /**
+                                     * @description Whether the product is featured
+                                     * @example true
+                                     */
+                                    featuredProduct: boolean;
+                                    imageUrls: (string | null)[];
+                                    /**
+                                     * @description The stock quantity of the product
+                                     * @example 10
+                                     */
+                                    stockQuantity: number;
+                                    /**
+                                     * @description A brief description of the product
+                                     * @example A versatile kettlebell that can be collapsed for easy storage.
+                                     */
+                                    description?: string;
+                                };
+                                cartId: string;
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of when the user account was created
+                                 * @example 2023-10-27T10:00:00Z
+                                 */
+                                createdAt: string;
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of the last time the user account was updated
+                                 * @example 2023-10-27T10:30:00Z
+                                 */
+                                updatedAt: string;
+                            }[];
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        };
+                    };
+                };
+                /** @description Failed to delete itom from cart */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch: {
+            parameters: {
+                query?: never;
+                header: {
+                    Authorization: string;
+                };
+                path: {
+                    cart_item_id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** @default 1 */
+                        quantity?: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description Succesfully update cart item */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /**
+                             * @description ID of the user, a unique identifier
+                             * @example 01K31B632RFYSBZF5PHJWQ7QZA
+                             */
+                            id: string;
+                            items: {
+                                id: string;
+                                quantity: number;
+                                productId: string;
+                                product: {
+                                    /**
+                                     * @description The unique identifier for the product
+                                     * @example 01H8MECHZX3TBDSZ7XRADM79XV
+                                     */
+                                    id: string;
+                                    /**
+                                     * @description The slug for the product
+                                     * @example collapsible-kettlebell
+                                     */
+                                    slug: string;
+                                    /**
+                                     * @description The name of the product
+                                     * @example Collapsible Kettlebell
+                                     */
+                                    name: string;
+                                    /**
+                                     * @description The price of the product
+                                     * @example 10000
+                                     */
+                                    price: number;
+                                    /**
+                                     * @description Whether the product is featured
+                                     * @example true
+                                     */
+                                    featuredProduct: boolean;
+                                    imageUrls: (string | null)[];
+                                    /**
+                                     * @description The stock quantity of the product
+                                     * @example 10
+                                     */
+                                    stockQuantity: number;
+                                    /**
+                                     * @description A brief description of the product
+                                     * @example A versatile kettlebell that can be collapsed for easy storage.
+                                     */
+                                    description?: string;
+                                };
+                                cartId: string;
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of when the user account was created
+                                 * @example 2023-10-27T10:00:00Z
+                                 */
+                                createdAt: string;
+                                /**
+                                 * Format: date
+                                 * @description The UTC timestamp of the last time the user account was updated
+                                 * @example 2023-10-27T10:30:00Z
+                                 */
+                                updatedAt: string;
+                            }[];
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of when the user account was created
+                             * @example 2023-10-27T10:00:00Z
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date
+                             * @description The UTC timestamp of the last time the user account was updated
+                             * @example 2023-10-27T10:30:00Z
+                             */
+                            updatedAt: string;
+                        };
+                    };
+                };
+                /** @description Failed to update item from cart */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         trace?: never;
     };
 }

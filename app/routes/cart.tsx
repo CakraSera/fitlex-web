@@ -31,32 +31,75 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
+  const method = request.method.toLowerCase();
   const token = session.get("token");
   const formData = await request.formData();
-  const deleteItemCart = {
-    id: String(formData.get("itemId")),
-  };
-  try {
-    const { data, error, response } = await clientOpenApi.DELETE(
-      `/cart/items/${deleteItemCart.id}`,
-      {
-        params: {
-          header: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
+
+  const actionType = String(formData.get("actionType"));
+  console.log({ actionType });
+
+  switch (actionType) {
+    case "deleteItemCart": {
+      const deleteItemCart = {
+        id: String(formData.get("itemId")),
+      };
+      try {
+        const { data, error, response } = await clientOpenApi.DELETE(
+          `/cart/items/{cart_item_id}`,
+          {
+            params: {
+              path: {
+                cart_item_id: deleteItemCart.id,
+              },
+              header: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          }
+        );
+        if (!response.ok) {
+          console.log(error);
+          session.flash("error", "Invalid username/password");
+        }
+        console.log(data);
+        return null;
+      } catch (error) {
+        console.error(error);
+        return null;
       }
-    );
-    if (!response.ok) {
-      console.log(error);
-      session.flash("error", "Invalid username/password");
     }
-    console.log(data);
-    return null;
-  } catch (error) {
-    console.error(error);
-    return null;
+    case "updateItemCart": {
+      const updateItemCart = {
+        id: String(formData.get("itemId")),
+        quantity: Number(formData.get("quantity")),
+      };
+      const intent = formData.get("intent") as string;
+      console.log(intent);
+      if (intent === "increase") {
+        const { data, error, response } = await clientOpenApi.PATCH(
+          `/cart/items/{cart_item_id}`,
+          {
+            params: {
+              path: {
+                cart_item_id: updateItemCart.id,
+              },
+              header: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: {
+                quantity: updateItemCart.quantity + 1,
+              },
+            },
+          }
+        );
+        if (!response.ok) {
+          console.log(error);
+          session.flash("error", "Invalid increase data");
+        }
+      }
+    }
   }
 }
 
@@ -68,6 +111,10 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
   );
   const totalItems = cartItems.length;
   const finalTotal = totalPrice;
+
+  function addQuantityItem() {
+    console.log("");
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -146,6 +193,11 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                         </div>
                         <form method="post">
                           <Input type="hidden" name="itemId" value={item.id} />
+                          <Input
+                            type="hidden"
+                            name="actionType"
+                            defaultValue="updateItemCart"
+                          />
                           <Button
                             variant="ghost"
                             type="submit"
@@ -161,46 +213,44 @@ export default function CartPage({ loaderData }: Route.ComponentProps) {
                       </div>
 
                       <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-3">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-7 w-7 sm:h-8 sm:w-8 bg-transparent"
-                            // onClick={() =>
-                            //   handleQuantityChange(
-                            //     item.product.id,
-                            //     item.quantity - 1
-                            //   )
-                            // }
-                            disabled={item.quantity <= 1}>
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <Input
-                            type="number"
-                            min="1"
-                            value={item.quantity}
-                            // onChange={(e) =>
-                            //   handleQuantityChange(
-                            //     item.product.id,
-                            //     Number.parseInt(e.target.value) || 1
-                            //   )
-                            // }
-                            className="w-14 sm:w-16 h-7 sm:h-8 text-center text-sm"
-                          />
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-7 w-7 sm:h-8 sm:w-8 bg-transparent"
-                            // onClick={() =>
-                            //   handleQuantityChange(
-                            //     item.product.id,
-                            //     item.quantity + 1
-                            //   )
-                            // }
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </div>
+                        <form method="post">
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="hidden"
+                              name="itemId"
+                              defaultValue={item.id}
+                            />
+                            <Input
+                              type="hidden"
+                              name="actionType"
+                              defaultValue="updateItemCart"
+                            />
+                            <Button
+                              name="intent"
+                              value="decrease"
+                              variant="outline"
+                              size="icon"
+                              className="h-7 w-7 sm:h-8 sm:w-8 bg-transparent"
+                              disabled={item.quantity <= 1}>
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <Input
+                              name="quantity"
+                              type="number"
+                              min="1"
+                              value={item.quantity}
+                              className="w-14 sm:w-16 h-7 sm:h-8 text-center text-sm"
+                            />
+                            <Button
+                              name="intent"
+                              value="increase"
+                              variant="outline"
+                              size="icon"
+                              className="h-7 w-7 sm:h-8 sm:w-8 bg-transparent">
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </form>
 
                         <div className="text-left xs:text-right">
                           <p className="text-xs sm:text-sm text-muted-foreground">
