@@ -18,6 +18,19 @@ export const registerSchema = userSchema
 
 export type Register = z.infer<typeof registerSchema>;
 
+const ErrorRegisterSchema = registerSchema
+  .pick({
+    fullName: true,
+    email: true,
+    username: true,
+    password: true,
+    confirmPassword: true,
+  })
+  .extend({
+    general: z.string().optional(),
+  });
+
+export type ErrorRegister = z.infer<typeof ErrorRegisterSchema>;
 export const loginSchema = userSchema.pick({
   email: true,
   password: true,

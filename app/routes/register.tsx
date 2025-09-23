@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useActionData, redirect } from "react-router";
-import { useSessionStorage } from "@uidotdev/usehooks";
+import { Link, useActionData, redirect, data } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
@@ -19,15 +18,39 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Eye, EyeOff } from "lucide-react";
-import { toast } from "sonner";
-import { registerSchema, type Register } from "~/modules/auth/schema";
-import { type User } from "~/modules/user/schema";
+import {
+  registerSchema,
+  type ErrorRegister,
+  type Register,
+} from "~/modules/auth/schema";
 import { clientOpenApi } from "~/lib/client-openapi";
 import type { Route } from "./+types/register";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { commitSession, getSession } from "~/sessions.server";
+import z from "zod";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("token")) {
+    // Redirect to the home page if they are already signed in.
+    return redirect("/");
+  }
+
+  return data(
+    { error: session.get("error") },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
+}
 
 export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
   const formData = await request.formData();
 
   const registerData = {
@@ -40,12 +63,10 @@ export async function action({ request }: Route.ActionArgs) {
 
   // Validate the data
   const validation = registerSchema.safeParse(registerData);
+  console.log("🚀 ~ action ~ validation:", validation.error);
+
   if (!validation.success) {
-    const errors: Record<string, string> = {};
-    validation.error.issues.forEach((issue) => {
-      errors[issue.path[0] as string] = issue.message;
-    });
-    return { errors };
+    return { errors: z.flattenError(validation.error).fieldErrors }; // Return validation errors
   }
 
   try {
@@ -62,11 +83,8 @@ export async function action({ request }: Route.ActionArgs) {
     );
 
     if (error) {
-      return {
-        errors: {
-          general: "Registration failed. Please try again.",
-        },
-      };
+      console.error(error);
+      session.flash("error", "Invalid username/password");
     }
 
     if (!data) {
@@ -91,6 +109,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const actionData = useActionData<typeof action>();
+  const errors: ErrorRegister = actionData?.errors;
 
   const form = useForm<Register>({
     resolver: zodResolver(registerSchema),
@@ -131,7 +150,12 @@ export default function RegisterPage() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
+                    {errors?.fullName ? (
+                      <p className="text-destructive text-sm">
+                        {errors.fullName}
+                      </p>
+                    ) : null}
                   </FormItem>
                 )}
               />
@@ -149,7 +173,12 @@ export default function RegisterPage() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
+                    {errors?.username ? (
+                      <p className="text-destructive text-sm">
+                        {errors.username}
+                      </p>
+                    ) : null}
                   </FormItem>
                 )}
               />
@@ -167,7 +196,10 @@ export default function RegisterPage() {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
+                    {errors?.email ? (
+                      <p className="text-destructive text-sm">{errors.email}</p>
+                    ) : null}
                   </FormItem>
                 )}
               />
@@ -200,7 +232,12 @@ export default function RegisterPage() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
+                    {errors?.password ? (
+                      <p className="text-destructive text-sm">
+                        {errors.password}
+                      </p>
+                    ) : null}
                   </FormItem>
                 )}
               />
@@ -235,11 +272,15 @@ export default function RegisterPage() {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
+                    {errors?.confirmPassword ? (
+                      <p className="text-destructive text-sm">
+                        {errors.confirmPassword}
+                      </p>
+                    ) : null}
                   </FormItem>
                 )}
               />
-
               <Button type="submit" className="w-full">
                 Create account
               </Button>
