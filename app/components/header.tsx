@@ -1,4 +1,4 @@
-import { ShoppingCart, LogOut, User } from "lucide-react";
+import { ShoppingCart, LogOut, User, Search, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { MobileNav } from "~/components/mobile-nav";
@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import type { Route } from "../layouts/+types/layout-main";
+import { useState } from "react";
+import { Input } from "./ui/input";
 
 export async function action({ request }: Route.ActionArgs) {
   return null;
@@ -24,9 +26,13 @@ export function Header({
   userAccess: boolean;
   totalItems: number;
 }) {
-  async function logout() {
-    // setUser(null);
-  }
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setShowSearch(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -67,6 +73,101 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* Desktop Search */}
+          <div className="hidden sm:flex items-center">
+            {showSearch ? (
+              <form method="get" className="flex items-center gap-2">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search products..."
+                    name="q"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setSearchQuery(e.target.value);
+                    }}
+                    className="pl-10 pr-10 w-64 h-10"
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearSearch}
+                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0">
+                      <X className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
+              </form>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 sm:h-10 sm:w-10"
+                onClick={() => setShowSearch(true)}>
+                <Search className="h-4 w-4" />
+                <span className="sr-only">Search</span>
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile Search */}
+          <div className="sm:hidden">
+            {showSearch ? (
+              <form
+                method="get"
+                className="absolute top-full left-0 right-0 bg-background border-b p-4 shadow-lg">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search products..."
+                      name="q"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setSearchQuery(e.target.value);
+                      }}
+                      className="pl-10 pr-10"
+                      autoFocus
+                    />
+                    {searchQuery && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearSearch}
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0">
+                        <X className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
+                  <Button type="submit" size="sm">
+                    Search
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowSearch(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setShowSearch(true)}>
+                <Search className="h-4 w-4" />
+                <span className="sr-only">Search</span>
+              </Button>
+            )}
+          </div>
           {/* Cart Button */}
           <Link to="/cart">
             <Button
