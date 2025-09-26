@@ -36,15 +36,19 @@ const client = createClient<paths>({
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
-  const q = String(url.searchParams.get("q"));
+  const q = url.searchParams.get("q") || "";
 
-  const { data, error, response } = await client.GET("/products", {
-    params: {
-      query: {
-        q,
-      },
-    },
-  });
+  const option = q
+    ? {
+        params: {
+          query: {
+            q,
+          },
+        },
+      }
+    : undefined;
+
+  const { data, error, response } = await client.GET("/products", option);
 
   if (!response.ok) {
     console.error(error);

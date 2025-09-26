@@ -2,7 +2,7 @@ import { ShoppingCart, LogOut, User, Search, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { MobileNav } from "~/components/mobile-nav";
-import { Link, redirect } from "react-router";
+import { Link, redirect, useSearchParams } from "react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,6 @@ import type { Route } from "../layouts/+types/layout-main";
 import { useState } from "react";
 import { Input } from "./ui/input";
 
-export async function action({ request }: Route.ActionArgs) {
-  return null;
-}
-
 export function Header({
   userAccess,
   totalItems,
@@ -26,11 +22,11 @@ export function Header({
   userAccess: boolean;
   totalItems: number;
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
+  const [searchParams] = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
+  const [showSearch, setShowSearch] = useState(initialQuery !== "");
 
   const clearSearch = () => {
-    setSearchQuery("");
     setShowSearch(false);
   };
 
@@ -85,24 +81,18 @@ export function Header({
                   <Input
                     placeholder="Search products..."
                     name="q"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setSearchQuery(e.target.value);
-                    }}
+                    defaultValue={initialQuery}
                     className="pl-10 pr-10 w-64 h-10"
                     autoFocus
                   />
-                  {searchQuery && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearSearch}
-                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0">
-                      <X className="h-3 w-3" />
-                    </Button>
-                  )}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearSearch}
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0">
+                    <X className="h-3 w-3" />
+                  </Button>
                 </div>
               </form>
             ) : (
@@ -129,24 +119,10 @@ export function Header({
                     <Input
                       placeholder="Search products..."
                       name="q"
-                      value={searchQuery}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setSearchQuery(e.target.value);
-                      }}
+                      defaultValue={initialQuery}
                       className="pl-10 pr-10"
                       autoFocus
                     />
-                    {searchQuery && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearSearch}
-                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0">
-                        <X className="h-3 w-3" />
-                      </Button>
-                    )}
                   </div>
                   <Button type="submit" size="sm">
                     Search
