@@ -73,8 +73,6 @@ export default function ProductsPage({ loaderData }: Route.ComponentProps) {
   const [priceRange, setPriceRange] = useState("all");
   const [inStockOnly, setInStockOnly] = useState(false);
   const [featuredOnly, setFeaturedOnly] = useState(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
 
   const categories = [
     ...new Set((products ?? []).map((product) => product.category)),
