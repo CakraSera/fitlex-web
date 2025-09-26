@@ -34,8 +34,22 @@ const client = createClient<paths>({
   baseUrl: import.meta.env.VITE_BACKEND_API_URL,
 });
 
-export async function clientLoader({}: Route.ClientLoaderArgs) {
-  const { data } = await client.GET("/products");
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const q = String(url.searchParams.get("q"));
+
+  const { data, error, response } = await client.GET("/products", {
+    params: {
+      query: {
+        q,
+      },
+    },
+  });
+
+  if (!response.ok) {
+    console.error(error);
+    return { products: null };
+  }
   return { products: data };
 }
 
